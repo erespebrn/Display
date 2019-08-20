@@ -10,13 +10,56 @@ extern int b_b;
 
 Adafruit_NeoPixel st = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
+//Default constructor for Display class
+Display::Display() : strip(st)
+{
+    x_pos = 1;
+    y_pos = 1;
+    g=20;
+    r=60;
+    b=20;
+    r_bg = r_b;
+    g_bg = g_b;
+    b_bg = b_b;
+}
+
+//Alternative constructor with pixels array as an argument
+Display::Display(int * tab, uint8_t sof)
+{
+    strip = st;
+    x_pos = 1;
+    y_pos = 1;
+    g=20;
+    r=60;
+    b=20;
+    r_bg = r_b;
+    g_bg = g_b;
+    b_bg = b_b;
+    mode = CUS;
+    tab_custom = tab;
+    size = sof;
+}
+
+//Begin method for display class
+void Display::begin()
+{
+    Serial.begin(9600);
+    strip.begin();
+    Serial.print("Initializing SD card connection...");
+    if (!SD.begin(4))
+    {
+        Serial.println("initialization failed!");
+        return;
+    }
+    Serial.println("initialization done.");
+}
 
 //Method to display numbers
-void Display::show(int no)
+void Display::show(uint8_t no)
 {
     mode = NUM;
     num = no;
-    int x_temp = x_pos;
+    uint8_t x_temp = x_pos;
     if(font_s == 0)
         path = "patterns/numbers/small/" + String(no) + ".txt";
     else if(font_s == 1)
@@ -26,52 +69,18 @@ void Display::show(int no)
     strip.show();
     x_pos = x_temp;
 }
-
-void Display::show()
-{
-    display_pixels();
-    strip.show();
-}
-
-void Display::erase_it()
-{
-    int r_temp = r;
-    int g_temp = g;
-    int b_temp = b;
-    r=r_bg;
-    g=g_bg;
-    b=b_bg;
-    if(mode == 1)
-    {
-        this->show(text);
-    }
-    else if(mode == 2)
-    {
-        this->show(num);
-    }
-    else
-    {
-        this->show();
-    }
-
-
-    r = r_temp;
-    g = g_temp;
-    b = b_temp;
-}
-
 //Method for displaying text
-void Display::show(const String txt)
+void Display::show(const String & txt)
 {
     mode = LET;
     text = txt;
-    int z = text.length();
-    int t = 0;
-    int i = 0;
+    uint8_t z = text.length();
+    uint8_t t = 0;
+    uint8_t i = 0;
     String text_tab[z];
     Serial.println(z);
-    int x_temp = x_pos;
-    int y_temp = y_pos;
+    uint8_t x_temp = x_pos;
+    uint8_t y_temp = y_pos;
 
 
     for(i, t; i<z; i++, t++)
@@ -82,7 +91,7 @@ void Display::show(const String txt)
         if(c == '%')
         {
             i++;
-            int y = i;
+            uint8_t y = i;
             String mark = "";
             for(y; y<i+3; y++)
                 mark += text.charAt(y);
@@ -96,7 +105,7 @@ void Display::show(const String txt)
     }
     z = t;
 
-    for(int i = 0; i <z; i++)
+    for(uint8_t i = 0; i <z; i++)
     {
         path = "patterns/letters/" + text_tab[i] + ".txt";
         SD_reader();
@@ -116,66 +125,56 @@ void Display::show(const String txt)
     y_pos = y_temp;
     strip.show();
 }
-
-Display::Display()
+//Method for displaying custom pixels array
+void Display::show()
 {
-    strip = st;
-    x_pos = 1;
-    y_pos = 1;
-    g=20;
-    r=60;
-    b=20;
-    r_bg = r_b;
-    g_bg = g_b;
-    b_bg = b_b;
+    display_pixels();
+    strip.show();
 }
-
-Display::Display(int * tab, int sof)
+//Method for erasing (displaying in background color)
+void Display::erase_it()
 {
-    strip = st;
-    x_pos = 1;
-    y_pos = 1;
-    g=20;
-    r=60;
-    b=20;
-    r_bg = r_b;
-    g_bg = g_b;
-    b_bg = b_b;
-    mode = CUS;
-    tab_custom = tab;
-    size = sof;
-}
-
-void Display::begin()
-{
-    Serial.begin(9600);
-    strip.begin();
-    Serial.print("Initializing SD card...");
-    if (!SD.begin(4))
+    uint8_t r_temp = r;
+    uint8_t g_temp = g;
+    uint8_t b_temp = b;
+    r=r_bg;
+    g=g_bg;
+    b=b_bg;
+    if(mode == 1)
     {
-        Serial.println("initialization failed!");
-        return;
+        this->show(text);
     }
-    Serial.println("initialization done.");
+    else if(mode == 2)
+    {
+        this->show(num);
+    }
+    else
+    {
+        this->show();
+    }
+    r = r_temp;
+    g = g_temp;
+    b = b_temp;
 }
+
 //Method for digits/letters color setup
-void Display::set_text_colors(int rc, int gc, int bc)
+void Display::set_text_colors(uint8_t rc, uint8_t gc, uint8_t bc)
 {
-    rc = r;
-    gc = g;
-    bc = b;
+    r = rc;
+    g = gc;
+    b = bc;
 }
 
 //Method for background color setup
-void Display::set_bg_colors(int rc, int gc, int bc)
+void Display::set_bg_colors(uint8_t rc, uint8_t gc, uint8_t bc)
 {
-    rc = r_bg;
-    gc = g_bg;
-    bc = b_bg;
+    r_bg = rc;
+    g_bg = gc;
+    b_bg = bc;
 }
 
-//Method for position setup
-void Display::set_position(int x, int y)
+//Method for objects position setup
+void Display::set_position(uint8_t x, uint8_t y)
 {
     x_pos = x;
     y_pos = y;
@@ -192,8 +191,8 @@ void Display::SD_reader()
     {
         char inChar;
         char inData[3];
-        int index;
-        int i = 0;
+        uint8_t index;
+        uint8_t i = 0;
         int tab_x[50];
         int tab_y[50];
         bool started = false;
@@ -252,7 +251,7 @@ void Display::SD_reader()
             }
         }
         timefory = false;
-        for(int h = 0; h<i; h++)
+        for(uint8_t h = 0; h<i; h++)
         {
             tab_all[h] = (tab_x[h]-1)+(tab_y[h]-1)*40;
         }
@@ -265,33 +264,29 @@ void Display::SD_reader()
 
 }
 
-/*
-void Display::no_separator(const int & no)
+//Method for changing numbers size
+void Display::font_size(uint8_t size)
 {
-  help_tab[0] = 0;
-  help_tab[1] = 0;
-  int number = no;
-  int i = 0;
-  int cyfra = 0;
-  int z;
-
-  while(number>0)
-  {
-    cyfra = number % 10;
-    help_tab[i] = cyfra;
-    number /= 10;
-    i++;
-  }
-
-  z = help_tab[0];
-  help_tab[0] = help_tab[1];
-  help_tab[1] = z;
+    if(size == 0)
+        font_s = SMALL;
+    else if(size == 1)
+        font_s = BIG;
 }
-*/
+
+//Method for clearing all display (setting all for background color)
+void Display::clear_all()
+{
+    for(int i = 0 ; i < NUMPIXELS; i++)
+    {
+         strip.setPixelColor(i, strip.Color(r_b,g_b,b_b));
+    }
+    strip.show();
+}
+
 //Method for setting up pixels for next display.
 void Display::display_pixels()
 {
-    int i = 0;
+    uint8_t i = 0;
     if(mode != 3)
     {
         if(fopen)
@@ -313,19 +308,4 @@ void Display::display_pixels()
     }
 }
 
-void Display::font_size(int size)
-{
-    if(size == 0)
-        font_s = SMALL;
-    else if(size == 1)
-        font_s = BIG;
-}
 
-void Display::clear_all()
-{
-    for( int i = 0 ; i < NUMPIXELS; i++)
-    {
-         strip.setPixelColor(i, strip.Color(r_b,g_b,b_b));
-    }
-    strip.show();
-}

@@ -10,6 +10,12 @@ DHTsensor::DHTsensor() : dht(d)
     temperature = humidity = 0.0;
     tmark.set_position(1,1);
     hmark.set_position(21,1);
+    hmark.set_text_colors(0,50,50);
+    tmark.set_text_colors(0,50,50);
+    tempdis[0].set_text_colors(0,50,50);
+    tempdis[1].set_text_colors(0,50,50);
+    humdis[0].set_text_colors(0,50,50);
+    humdis[1].set_text_colors(0,50,50);
     tempdis[0].set_position(9,1);
     tempdis[1].set_position(13,1);
     humdis[0].set_position(28,1);
@@ -65,8 +71,6 @@ int * DHTsensor::no_separator(const int & no)
 void DHTsensor::show_dht()
 {
     read();
-    tempdis[0].set_text_colors(0,50,50);
-    hmark.set_text_colors(0,50,50);
     tmark.set_position(1,1);
     tmark.show("T%col");
     pd = no_separator(temperature);
