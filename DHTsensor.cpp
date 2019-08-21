@@ -33,9 +33,9 @@ void DHTsensor::read()
     temperature = dht.readTemperature();
 }
 
-int * DHTsensor::no_separator(const int & no)
+uint8_t * DHTsensor::no_separator(const uint8_t & no)
 {
-    int tab_size = 0;
+    uint8_t tab_size = 0;
     if(no/10 == 0)
     {
         tab_size = 1;
@@ -45,13 +45,13 @@ int * DHTsensor::no_separator(const int & no)
         tab_size = 2;
     }
 
-    int *help_tab = new int[tab_size];
+    uint8_t *help_tab = new uint8_t[tab_size];
     help_tab[0] = 0;
     help_tab[1] = 0;
-    int number = no;
-    int i = 0;
-    int cyfra = 0;
-    int z;
+    uint8_t number = no;
+    uint8_t i = 0;
+    uint8_t cyfra = 0;
+    uint8_t z;
 
     while(number>0)
     {

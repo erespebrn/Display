@@ -27,12 +27,13 @@ Clock::Clock() : rtc(a), t(temp), dot(dots_array,8)
 void Clock::begin()
 {
     rtc.begin();
+    t = rtc.getTime();
+    begin_time = t.min;
 }
-#define DHTPIN 2
-#define DHTTYPE DHT22
-int * Clock::no_separator(const int & no)
+
+uint8_t * Clock::no_separator(const uint8_t & no)
 {
-    int tab_size = 0;
+    uint8_t tab_size = 0;
     if(no/10 == 0)
     {
         tab_size = 1;
@@ -42,13 +43,13 @@ int * Clock::no_separator(const int & no)
         tab_size = 2;
     }
 
-    int *help_tab = new int[tab_size];
+    uint8_t *help_tab = new uint8_t[tab_size];
     help_tab[0] = 0;
     help_tab[1] = 0;
-    int number = no;
-    int i = 0;
-    int cyfra = 0;
-    int z;
+    uint8_t number = no;
+    uint8_t i = 0;
+    uint8_t cyfra = 0;
+    uint8_t z;
 
     while(number>0)
     {
@@ -177,6 +178,23 @@ void Clock::hours()
     both_hour = false;
     delete [] pd;
 
+}
+
+bool Clock::ten_minutes()
+{
+    if(begin_time+5 > 59)
+    {
+        begin_time = 0;
+    }
+    else if(begin_time + 5 == t.min && t.sec == 0)
+    {
+        return true;
+        begin_time = t.min;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void Clock::stop()

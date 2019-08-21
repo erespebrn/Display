@@ -16,15 +16,15 @@ class DHTsensor
         Display bgcol;
         bool both_temp = false;
         bool both_hum = false;
-        int t1 = -1;
-        int t2 = -1;
-        int h1 = -1;
-        int h2 = -1;
-        int *pd;
+        uint8_t t1 = -1;
+        uint8_t t2 = -1;
+        uint8_t h1 = -1;
+        uint8_t h2 = -1;
+        uint8_t *pd;
         float temperature;
         float humidity;
         void read();
-        int * no_separator(const int & no);
+        uint8_t * no_separator(const uint8_t & no);
         void show_temp();
         void show_hum();
     public:

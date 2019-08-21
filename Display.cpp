@@ -78,7 +78,6 @@ void Display::show(const String & txt)
     uint8_t t = 0;
     uint8_t i = 0;
     String text_tab[z];
-    Serial.println(z);
     uint8_t x_temp = x_pos;
     uint8_t y_temp = y_pos;
 
