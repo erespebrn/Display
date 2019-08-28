@@ -7,6 +7,7 @@
 DS3231 a(SDA,SCL);
 Time temp;
 
+//Clock constructor
 Clock::Clock() : rtc(a), t(temp), dot(dots_array,8)
 {
 
@@ -24,6 +25,7 @@ Clock::Clock() : rtc(a), t(temp), dot(dots_array,8)
     hour[1].font_size(1);
 }
 
+//Clock begin method
 void Clock::begin()
 {
     rtc.begin();
@@ -31,6 +33,7 @@ void Clock::begin()
     begin_time = t.min;
 }
 
+//Method for separating numbers into single digits
 uint8_t * Clock::no_separator(const uint8_t & no)
 {
     uint8_t tab_size = 0;
@@ -66,6 +69,7 @@ uint8_t * Clock::no_separator(const uint8_t & no)
 
 }
 
+//Method for showing time
 void Clock::show_time()
 {
 
@@ -79,6 +83,7 @@ void Clock::show_time()
     first_run = false;
 }
 
+//Private method for showing seconds. Called from show_time()
 void Clock::seconds()
 {
     if(t_s1 != pd[0] && t_s2 != pd[1])
@@ -126,6 +131,7 @@ void Clock::seconds()
     delete [] pd;
 }
 
+//Private method for showing minutes. Called from show_time()
 void Clock::minutes()
 {
     if(t_min1 != pd[0] && t_min2 != pd[1])
@@ -153,6 +159,7 @@ void Clock::minutes()
 
 }
 
+//Private method for showing hours. Called from show_time()
 void Clock::hours()
 {
     if(t_hour1 != pd[0] && t_hour2 != pd[1])
@@ -180,6 +187,7 @@ void Clock::hours()
 
 }
 
+//Return true if 10 minutes passed. For DHT updating
 bool Clock::ten_minutes()
 {
     if(begin_time+5 > 59)
@@ -197,6 +205,7 @@ bool Clock::ten_minutes()
     }
 }
 
+//Stop method for relaunching clock
 void Clock::stop()
 {
     first_run = true;

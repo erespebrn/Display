@@ -1,0 +1,12 @@
+ciekawe funkcje:
+
+SCHODKI:
+
+  for(int i=0; i<NUMPIXELS; i++)
+  {
+      y=i/10; // -- 10 zmienia ilosc diod na schodek
+      x=i*1; 	// -- 1 zmienia odstep miedzy diodami na schodkach
+      strip.setPixelColor((x-1)+(y-1)*40, strip.Color(50,50,0));
+      strip.show();  
+  }
+

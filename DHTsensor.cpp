@@ -5,34 +5,38 @@
 #define DHTTYPE DHT22
 DHT d(DHTPIN, DHTTYPE);
 
+//DHTsensor contructor
 DHTsensor::DHTsensor() : dht(d)
 {
     temperature = humidity = 0.0;
     tmark.set_position(1,1);
     hmark.set_position(21,1);
-    hmark.set_text_colors(0,50,50);
-    tmark.set_text_colors(0,50,50);
-    tempdis[0].set_text_colors(0,50,50);
-    tempdis[1].set_text_colors(0,50,50);
-    humdis[0].set_text_colors(0,50,50);
-    humdis[1].set_text_colors(0,50,50);
+    hmark.set_text_colors(50,50,0);
+    tmark.set_text_colors(50,50,0);
+    tempdis[0].set_text_colors(50,50,0);
+    tempdis[1].set_text_colors(50,50,0);
+    humdis[0].set_text_colors(50,50,0);
+    humdis[1].set_text_colors(50,50,0);
     tempdis[0].set_position(9,1);
     tempdis[1].set_position(13,1);
     humdis[0].set_position(28,1);
     humdis[1].set_position(32,1);
 }
 
+//DHTsensor begin function
 void DHTsensor::begin()
 {
     dht.begin();
 }
 
+//Method for reading from sensor, using DHT.H library
 void DHTsensor::read()
 {
     humidity = dht.readHumidity();
     temperature = dht.readTemperature();
 }
 
+//Method for separation numbers into single digits
 uint8_t * DHTsensor::no_separator(const uint8_t & no)
 {
     uint8_t tab_size = 0;
@@ -68,6 +72,7 @@ uint8_t * DHTsensor::no_separator(const uint8_t & no)
 
 }
 
+//Method for displaying temp and humidity
 void DHTsensor::show_dht()
 {
     read();
@@ -85,6 +90,7 @@ void DHTsensor::show_dht()
     hmark.show("%per");
 }
 
+//Private method for showing temp. Called from show_dht()
 void DHTsensor::show_temp()
 {
     if(t1 != pd[0] && t2 != pd[1])
@@ -112,6 +118,7 @@ void DHTsensor::show_temp()
 
 }
 
+//Private method for showing hum. Called from show_dht()
 void DHTsensor::show_hum()
 {
     if(h1 != pd[0] && h2 != pd[1])

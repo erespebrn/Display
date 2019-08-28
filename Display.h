@@ -9,6 +9,9 @@
 #include <SD.h>
 #include <stdint.h>
 
+#define NUMPIXELS 841
+#define PIN 7
+
 class Display
 {
     private:
@@ -38,12 +41,11 @@ class Display
         void show(uint8_t no);
         void show();
         void begin();
-        //void no_separator(const int & no);
         void set_position(uint8_t x, uint8_t y);
         void set_text_colors(uint8_t rc, uint8_t gc, uint8_t bc);
         void set_bg_colors(uint8_t rc, uint8_t gc, uint8_t bc);
         void erase_it();
         void font_size(uint8_t size);
-        void clear_all();
+        void clear_all(int hm = NUMPIXELS);
 };
 #endif

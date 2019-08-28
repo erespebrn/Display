@@ -31,6 +31,7 @@ class DHTsensor
         void begin();
         DHTsensor();
         void show_dht();
+
 };
 
 #endif

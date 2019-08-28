@@ -1,7 +1,6 @@
 #include "Display.h"
 
-#define NUMPIXELS 841
-#define PIN 7
+
 
 extern int r_b;
 extern int g_b;
@@ -15,9 +14,9 @@ Display::Display() : strip(st)
 {
     x_pos = 1;
     y_pos = 1;
-    g=20;
-    r=60;
-    b=20;
+    g=50;
+    r=10;
+    b=10;
     r_bg = r_b;
     g_bg = g_b;
     b_bg = b_b;
@@ -29,9 +28,9 @@ Display::Display(int * tab, uint8_t sof)
     strip = st;
     x_pos = 1;
     y_pos = 1;
-    g=20;
-    r=60;
-    b=20;
+    g=50;
+    r=10;
+    b=10;
     r_bg = r_b;
     g_bg = g_b;
     b_bg = b_b;
@@ -119,8 +118,6 @@ void Display::show(const String & txt)
         else
             x_pos += 5;
     }
-
-    x_pos = x_temp;
     y_pos = y_temp;
     strip.show();
 }
@@ -130,6 +127,7 @@ void Display::show()
     display_pixels();
     strip.show();
 }
+
 //Method for erasing (displaying in background color)
 void Display::erase_it()
 {
@@ -273,11 +271,11 @@ void Display::font_size(uint8_t size)
 }
 
 //Method for clearing all display (setting all for background color)
-void Display::clear_all()
+void Display::clear_all(int hm)
 {
-    for(int i = 0 ; i < NUMPIXELS; i++)
+    for(int i = 0 ; i < hm; i++)
     {
-         strip.setPixelColor(i, strip.Color(r_b,g_b,b_b));
+         strip.setPixelColor(i, strip.Color(r_bg,g_bg,b_bg));
     }
     strip.show();
 }
@@ -292,17 +290,19 @@ void Display::display_pixels()
         {
             while (i < how_many)
             {
-                strip.setPixelColor(tab_all[i], strip.Color(g,r,b));
+                strip.setPixelColor(tab_all[i], strip.Color(r,g,b));
                 i++;
             }
         }
+If you have any more housing offers in the future, I would really appreciate it, because I am going to start studying anyway and looking for an apartment.
     }
     else
     {
         while(i < size)
         {
-            strip.setPixelColor(tab_custom[i], strip.Color(g,r,b));
+            strip.setPixelColor(tab_custom[i], strip.Color(r,g,b));
             i++;
+            Serial.print(tab_custom[i]);
         }
     }
 }
